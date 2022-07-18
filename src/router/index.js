@@ -57,6 +57,62 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/banner',
+    component: Layout,
+    meta: { title: '轮播图管理', icon: 'banner' },
+    children: [
+      {
+        path: 'list',
+        name: 'BannerList',
+        component: () => import('@/views/banner/list.vue'),
+        meta: { title: '轮播图列表', icon: 'bannerlist' }
+      },
+      {
+        path: 'add',
+        name: 'BannerAdd',
+        component: () => import('@/views/banner/Add.vue')
+      },
+      {
+        path: 'edit',
+        name: 'BannerEdit',
+        component: () => import('@/views/banner/Edit.vue')
+      },
+      {
+        path: 'detail',
+        name: 'BannerDetail',
+        component: () => import('@/views/banner/Detail.vue')
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    meta: { title: '用户管理', icon: 'banner' },
+    children: [
+      {
+        path: 'list',
+        name: 'UserList',
+        component: () => import('@/views/user/list.vue'),
+        meta: { title: '用户列表', icon: 'bannerlist' }
+      },
+      {
+        path: 'add',
+        name: 'UserAdd',
+        component: () => import('@/views/user/Add.vue')
+      },
+      {
+        path: 'edit',
+        name: 'UserEdit',
+        component: () => import('@/views/user/Edit.vue')
+      },
+      {
+        path: 'detail',
+        name: 'UserDetail',
+        component: () => import('@/views/user/Detail.vue')
+      }
+    ]
+  },
+  {
     path: '/products',
     component: Layout,
     meta: { title: '商品管理', icon: 'table' },
@@ -70,23 +126,23 @@ export const constantRoutes = [
       {
         path: 'category',
         name: 'Category',
-        component: () => import('@/views/products/category.vue'),
+        component: () => import('@/views/products/category/category.vue'),
         meta: { title: '商品分类' }
       },
       {
         path: 'newcategory',
         name: 'NewCategory',
-        component: () => import('@/views/products/NewCategory.vue')
+        component: () => import('@/views/products/category/NewCategory.vue')
       },
       {
         path: 'editcategory',
         name: 'EditCategory',
-        component: () => import('@/views/products/EditCategory.vue')
+        component: () => import('@/views/products/category/EditCategory.vue')
       },
       {
         path: 'detailcategory',
         name: 'DetailCategory',
-        component: () => import('@/views/products/DetailCategory.vue')
+        component: () => import('@/views/products/category/DetailCategory.vue')
       },
       {
         path: 'add',

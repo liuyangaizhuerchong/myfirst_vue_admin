@@ -16,7 +16,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import moment from 'moment'
-
+import 'font-awesome/css/font-awesome.min.css'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
