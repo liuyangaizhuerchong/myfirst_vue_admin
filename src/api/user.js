@@ -49,3 +49,18 @@ export const delUserApi = (id) => del(`/api/v1/admin/user/${id}`)
  * @returns
  */
 export const oneUserApi = (id) => get(`/api/v1/admin/user/${id}`)
+/**
+ * 用户是否锁定
+ * @param {*} id
+ * @param {*} isLocked
+ * @returns
+ */
+export const isLockedApi = (id, isLocked) =>
+  put(`/api/v1/admin/user/${id}`, { isLocked })
+/**
+ * 用户购物车数据
+ * @param {*} user
+ * @returns
+ */
+export const showUserCartApi = (user) =>
+  get('/api/v1/admin/cart/info', { user })

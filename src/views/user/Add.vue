@@ -7,7 +7,6 @@
       <div class="text item">
         <el-form
           :model="ruleForm"
-          :rules="rules"
           ref="ruleForm"
           label-width="100px"
           class="demo-ruleForm"
@@ -33,6 +32,12 @@
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
+          <el-form-item label="性别">
+            <el-select v-model="ruleForm.gender" placeholder="请选择性别">
+              <el-option label="男" value="1" />
+              <el-option label="女" value="2" />
+            </el-select>
+          </el-form-item>
           <el-form-item align="right">
             <el-button type="primary" @click="submitForm('ruleForm')"
               >立即新增</el-button
@@ -56,11 +61,7 @@ export default {
       ruleForm: {
         nickName: '',
         gender: '',
-        desc: '',
-        avatar: '',
-        birthday: '',
-        address: '',
-        age: ''
+        avatar: ''
       }
     }
   },

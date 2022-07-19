@@ -54,7 +54,7 @@
         </el-table-column>
         <el-table-column label="头像" align="center">
           <template slot-scope="scope">
-            <el-image :src="scope.row.coverImage | dalImg"></el-image>
+            <el-image :src="scope.row.avatar | dalImg"></el-image>
           </template>
         </el-table-column>
         <el-table-column label="账户是否锁定" align="center">
@@ -62,7 +62,7 @@
             <span>{{ scope.row.isLocked ? '是' : '否' }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="操作" width="280">
+        <el-table-column align="center" label="操作" width="300">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -70,19 +70,29 @@
               @click="handleEdit(scope.$index, scope.row)"
               >查看</el-button
             >
-            <el-button size="mini" @click="handleEdit(scope.row)"
-              ><i class="el-icon-edit"></i
-            ></el-button>
-            <el-button size="mini" @click="handleLocked(scope.row)"
-              ><i class="fa fa-lock" aria-hidden="true"></i
-            ></el-button>
-            <!-- fa fa-unlock-alt -->
             <el-button
+              icon="el-icon-edit"
+              size="mini"
+              @click="handleEdit(scope.row)"
+            />
+            <el-button
+              :icon="scope.row.isLocked ? 'el-icon-lock' : 'el-icon-unlock'"
+              size="mini"
+              :type="scope.row.isLocked ? 'info' : 'warning'"
+              @click="lockHandle(scope.row)"
+            />
+            <el-button
+              icon="el-icon-shopping-cart-2"
+              type="success"
+              size="mini"
+              @click="showUserCart(scope.row)"
+            />
+            <el-button
+              icon="el-icon-delete"
               size="mini"
               type="danger"
               @click="handleDelete(scope.row)"
-              ><i class="el-icon-delete"></i
-            ></el-button>
+            />
           </template>
         </el-table-column>
       </el-table>
@@ -94,12 +104,52 @@
         @current-change="loadData"
       >
       </el-pagination>
+      <el-dialog
+        title="购物车"
+        :visible.sync="dialogTableVisible"
+        class="elDialog"
+      >
+        <el-table :data="cart" :header-cell-style="header_style">
+          <el-table-column
+            type="index"
+            label="序号"
+            width="50"
+            align="center"
+          />
+          <el-table-column
+            property="product.name"
+            label="商品名称"
+            align="center"
+          />
+          <el-table-column
+            property="product.category"
+            label="商品分类"
+            align="center"
+          />
+          <el-table-column label="商品主图" align="center">
+            <template slot-scope="scope">
+              <el-image
+                :src="scope.row.product.coverImage | dalImg" /></template
+          ></el-table-column>
+          <el-table-column
+            property="product.price"
+            label="商品售价"
+            align="center"
+          />
+          <el-table-column property="amount" label="购买数量" align="center" />
+        </el-table>
+      </el-dialog>
     </el-card>
   </div>
 </template>
 
 <script>
-import { listUserApi, delUserApi } from '@/api/user'
+import {
+  listUserApi,
+  delUserApi,
+  isLockedApi,
+  showUserCartApi
+} from '@/api/user'
 export default {
   data() {
     return {
@@ -107,6 +157,8 @@ export default {
         backgroundColor: '#f3f5f9'
       },
       loading: false,
+      dialogTableVisible: false,
+      cart: [],
       list: [],
       total: 0,
       formSearch: {
@@ -122,7 +174,7 @@ export default {
     async loadData(page) {
       this.list = []
       const res = await listUserApi({ page, ...this.formSearch })
-      console.log(res)
+      // console.log(res)
       this.loading = true
       this.list = res.data
       this.total = res.total
@@ -165,8 +217,15 @@ export default {
     onSubmit() {
       this.loadData(1)
     },
-    handleLocked(row) {
-      console.log(row)
+    async lockHandle(item) {
+      console.log(item)
+      await isLockedApi(item.id, !item.isLocked)
+      this.loadData(1)
+    },
+    async showUserCart(item) {
+      const res = await showUserCartApi(item.id)
+      this.dialogTableVisible = true
+      this.cart = res.data.filter((item) => item.product)
     }
   }
 }

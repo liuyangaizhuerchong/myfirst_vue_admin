@@ -1,6 +1,6 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">
+  <div class="home-container">
+    <div class="home-text">
       <div class="swiper">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="item in list" :key="item.id">
@@ -24,7 +24,7 @@ import Swiper from 'swiper/swiper-bundle.min.js'
 import 'swiper/swiper-bundle.min.css'
 import { get } from '@/utils/request'
 export default {
-  name: 'Dashboard',
+  name: 'Home',
   data() {
     return {
       list: []
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dashboard {
+.home {
   &-container {
     margin: 10px;
   }
