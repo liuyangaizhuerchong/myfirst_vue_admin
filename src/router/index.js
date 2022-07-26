@@ -81,6 +81,27 @@ export const constantRoutes = [
         path: 'detail',
         name: 'BannerDetail',
         component: () => import('@/views/banner/Detail.vue')
+      },
+      {
+        path: 'categorylist',
+        name: 'CategoryList',
+        component: () => import('@/views/banner/category/list.vue'),
+        meta: { title: '轮播图分类', icon: 'bannerlist' }
+      },
+      {
+        path: 'categoryadd',
+        name: 'CategoryAdd',
+        component: () => import('@/views/banner/category/Add.vue')
+      },
+      {
+        path: 'categoryedit',
+        name: 'CategoryEdit',
+        component: () => import('@/views/banner/category/Edit.vue')
+      },
+      {
+        path: 'categorydetail',
+        name: 'CategoryDetail',
+        component: () => import('@/views/banner/category/Detail.vue')
       }
     ]
   },

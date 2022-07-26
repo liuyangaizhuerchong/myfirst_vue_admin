@@ -1,7 +1,7 @@
 <template>
   <div class="el-dialog">
     <el-dialog
-      title="编辑轮播图"
+      title="编辑分类"
       :visible.sync="dialogFormVisible"
       :destroy-on-close="destroyonclose"
       @close="resetFile"
@@ -13,20 +13,10 @@
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="轮播图名称" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入轮播图名称" />
+        <el-form-item label="分类名称" prop="name">
+          <el-input v-model="ruleForm.name" placeholder="请输入分类名称" />
         </el-form-item>
-        <el-form-item label="轮播图分类" prop="category">
-          <el-select v-model="ruleForm.category" placeholder="请选择轮播图分类">
-            <el-option
-              v-for="item in categories"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="轮播图图片" prop="coverImage">
+        <el-form-item label="分类主图" prop="coverImage">
           <upload-url
             :imageUrl="ruleForm.coverImage"
             @changeImage="changeHandleImage"
@@ -36,7 +26,7 @@
           <el-input
             type="textarea"
             v-model="ruleForm.desc"
-            placeholder="请输入轮播图描述"
+            placeholder="请输入分类描述"
           />
         </el-form-item>
       </el-form>
@@ -52,8 +42,8 @@
 </template>
 
 <script>
-import { putProductApi, oneProductIdApi } from '@/api/banner'
-import { mapActions, mapState } from 'vuex'
+import { putProductApi, oneProductIdApi } from '@/api/bannerCategory'
+import { mapActions } from 'vuex'
 import UploadUrl from '@/components/UploadImg'
 export default {
   name: 'EditBanner',
@@ -68,32 +58,20 @@ export default {
         name: '',
         desc: '',
         id: '',
-        coverImage: '',
-        category: ''
+        coverImage: ''
       },
       rules: {
-        name: [
-          { required: true, message: '请输入轮播图名称', trigger: 'blur' }
-        ],
-        desc: [
-          { required: true, message: '请输入轮播图简述', trigger: 'blur' }
-        ],
-        category: [
-          { required: true, message: '请选择轮播图分类', trigger: 'blur' }
-        ]
+        name: [{ required: true, message: '请输入分类名称', trigger: 'blur' }],
+        desc: [{ required: true, message: '分类简述', trigger: 'blur' }]
       }
     }
   },
-  computed: { ...mapState('banner', ['categories']) },
-  async created() {
-    this.loadCategory()
-  },
+  // computed: { ...mapState('banner', ['ruleForm']) },
   methods: {
-    ...mapActions('banner', ['loadData', 'loadCategory']),
+    ...mapActions('bannercategory', ['loadData']),
     async loadOneDetail(id) {
       const res = await oneProductIdApi(id)
       this.ruleForm = res
-      this.ruleForm.category = res.category === null ? '' : res.category.id
     },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {

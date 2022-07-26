@@ -22,29 +22,15 @@
             clearable
           />
         </el-form-item>
-        <el-form-item label="轮播图分类" prop="category">
-          <el-select
-            v-model="formSearch.category"
-            placeholder="请选择轮播图分类"
-            clearable
-          >
-            <el-option
-              v-for="item in categories"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
         </el-form-item>
       </el-form>
       <el-table
-        class="bannermain"
+        class="main"
         :header-cell-style="header_style"
         v-loading="loading"
-        :data="list"
+        :data="data"
       >
         <el-table-column type="selection" width="55" align="center">
         </el-table-column>
@@ -56,17 +42,6 @@
           </template>
         </el-table-column>
         <el-table-column prop="name" label="轮播图名称" align="center">
-        </el-table-column>
-        <el-table-column prop="categories" label="轮播图分类" align="center">
-          <template slot-scope="scope">
-            <span>{{
-              scope.row.category === null
-                ? ''
-                : scope.row.category.name
-                ? scope.row.category.name
-                : ''
-            }}</span>
-          </template>
         </el-table-column>
         <el-table-column label="轮播图图片" align="center">
           <template slot-scope="scope">
@@ -110,7 +85,7 @@
 </template>
 
 <script>
-import { delProductApi } from '@/api/banner'
+import { delProductApi } from '@/api/bannerCategory'
 import addBanner from './Add.vue'
 import editBanner from './Edit.vue'
 import { mapActions, mapState } from 'vuex'
@@ -125,19 +100,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('banner', [
-      'list',
-      'total',
-      'formSearch',
-      'loading',
-      'categories'
-    ])
+    ...mapState('bannercategory', ['data', 'total', 'formSearch', 'loading'])
   },
   created() {
     this.loadData(1)
   },
   methods: {
-    ...mapActions('banner', ['loadData']),
+    ...mapActions('bannercategory', ['loadData']),
     handleEdit(row) {
       this.$refs.eidtBanner.dialogFormVisible = true
       this.$refs.eidtBanner.loadOneDetail(row.id)

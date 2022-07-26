@@ -119,7 +119,6 @@ export default {
       const res = await modelListApi()
       this.categories = res.data
       const resOneDetail = await oneProductIdApi(this.$route.query.id)
-      // console.log(resOneDetail)
       this.ruleForm = resOneDetail
       this.ruleForm.category = resOneDetail.category.id
     },

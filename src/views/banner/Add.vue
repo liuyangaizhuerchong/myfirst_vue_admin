@@ -1,61 +1,59 @@
 <template>
-  <div class="app-container">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>轮播图新增</span>
-      </div>
-      <div class="text item">
-        <el-form
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-          label-width="100px"
-          class="demo-ruleForm"
+  <div class="el-dialog">
+    <el-dialog
+      title="新增轮播图"
+      :visible.sync="dialogFormVisible"
+      :destroy-on-close="destroyonclose"
+      @close="resetFile"
+    >
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="轮播图名称" prop="name">
+          <el-input v-model="ruleForm.name" placeholder="请输入轮播图名称" />
+        </el-form-item>
+        <el-form-item label="轮播图图片">
+          <upload-url
+            :imageUrl="ruleForm.coverImage"
+            @changeImage="changeHandleImage"
+          />
+        </el-form-item>
+        <el-form-item label="描述" prop="desc">
+          <el-input
+            type="textarea"
+            v-model="ruleForm.desc"
+            placeholder="请输入轮播图描述"
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancle('ruleForm')">取消</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')"
+          >立即新增</el-button
         >
-          <el-form-item label="轮播图名称" prop="name">
-            <el-input v-model="ruleForm.name" placeholder="请输入轮播图名称" />
-          </el-form-item>
-          <el-form-item label="轮播图图片">
-            <el-upload
-              class="avatar-uploader"
-              :action="serverUpload"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-            >
-              <img
-                v-if="ruleForm.coverImage"
-                :src="ruleForm.coverImage | dalImg"
-                class="avatar"
-              />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="描述" prop="desc">
-            <el-input
-              type="textarea"
-              v-model="ruleForm.desc"
-              placeholder="请输入轮播图描述"
-            />
-          </el-form-item>
-          <el-form-item align="right">
-            <el-button type="primary" @click="submitForm('ruleForm')"
-              >立即新增</el-button
-            >
-            <el-button @click="resetForm('ruleForm')">重置</el-button>
-          </el-form-item>
-        </el-form>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
       </div>
-    </el-card>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { newAddProductApi } from '@/api/banner'
-import { serverUpload } from '@/utils/request'
+import { mapActions } from 'vuex'
+import UploadUrl from '@/components/UploadImg'
 export default {
+  name: 'AddBanner',
+  components: { UploadUrl },
+  props: ['bannerDialog'],
   data() {
     return {
-      serverUpload,
+      destroyonclose: true,
+      dialogFormVisible: false,
+      formLabelWidth: '120px',
       ruleForm: {
         name: '',
         desc: '',
@@ -70,16 +68,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions('banner', ['loadData']),
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           await newAddProductApi(this.ruleForm)
           this.$message.success('新增成功')
-          this.$router.push({
-            name: 'BannerList'
-          })
+          this.dialogFormVisible = false
+          // location.reload()
+          this.loadData(1)
         } else {
-          console.log('error submit!!')
           return false
         }
       })
@@ -87,40 +85,37 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    handleAvatarSuccess(res, file) {
-      if (res.code === 1) {
-        this.$message.success('上传成功！')
-        this.ruleForm.coverImage = res.data
-      } else {
-        this.$message.error('上传失败，请重新上传！')
-      }
+    cancle() {
+      this.dialogFormVisible = false
+    },
+    changeHandleImage(img) {
+      this.ruleForm.coverImage = img
+    },
+    resetFile() {
+      this.ruleForm = {}
     }
   }
 }
 </script>
 
 <style>
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
+.el-icon-close:before {
+  content: '\e6db';
+  color: orange;
 }
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
+.el-dialog__headerbtn {
+  font-size: 15px;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border-radius: 50%;
+  top: 17px;
+  color: orange;
 }
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
+.el-dialog__header {
+  background-color: #f3f5f9;
+  padding: 20px;
 }
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
+.el-dialog__title {
 }
 </style>

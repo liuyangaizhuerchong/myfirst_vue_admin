@@ -18,19 +18,10 @@
             <el-input v-model="ruleForm.nickName" placeholder="请输入昵称" />
           </el-form-item>
           <el-form-item label="头像">
-            <el-upload
-              class="avatar-uploader"
-              :action="serverUpload"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-            >
-              <img
-                v-if="ruleForm.avatar"
-                :src="ruleForm.avatar | dalImg"
-                class="avatar"
-              />
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <upload-img
+              :imageUrl="ruleForm.avatar"
+              @changeImage="avatarHandle"
+            ></upload-img>
           </el-form-item>
           <el-form-item label="性别">
             <el-select v-model="ruleForm.gender" placeholder="请选择性别">
@@ -60,11 +51,12 @@
 
 <script>
 import { putUserApi, oneUserApi } from '@/api/user'
-import { serverUpload } from '@/utils/request'
+import uploadImg from '@/components/UploadImg.vue'
 export default {
+  name: 'UserEdit',
+  components: { uploadImg },
   data() {
     return {
-      serverUpload,
       ruleForm: {
         userName: '',
         nickName: '',
@@ -80,7 +72,6 @@ export default {
   methods: {
     async loadCategory() {
       const resOneDetail = await oneUserApi(this.$route.query.id)
-      // console.log(resOneDetail)
       this.ruleForm = resOneDetail
     },
     submitForm(formName) {
@@ -103,13 +94,8 @@ export default {
     handleRemove(file, fileList) {
       console.log(file, fileList)
     },
-    handleAvatarSuccess(res, file) {
-      if (res.code === 1) {
-        this.$message.success('上传成功！')
-        this.ruleForm.avatar = res.data
-      } else {
-        this.$message.error('上传失败，请重新上传！')
-      }
+    avatarHandle(img) {
+      this.ruleForm.avatar = img
     }
   }
 }

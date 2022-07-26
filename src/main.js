@@ -16,8 +16,8 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-import moment from 'moment'
-import 'font-awesome/css/font-awesome.min.css'
+import moment from 'moment' // 时间格式组件
+import 'default-passive-events' // 去掉警告[Violation] Added non-passive event listener to a scroll-blocking 'mousewheel' event.
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

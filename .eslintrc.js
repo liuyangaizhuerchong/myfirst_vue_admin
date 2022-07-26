@@ -45,7 +45,7 @@ module.exports = {
         properties: 'always'
       }
     ],
-    'comma-dangle': [2, 'never'],
+    'comma-dangle': [0, 'never'],
     'comma-spacing': [
       2,
       {
@@ -265,6 +265,8 @@ module.exports = {
         objectsInObjects: false
       }
     ],
-    'array-bracket-spacing': [2, 'never']
+    'array-bracket-spacing': [2, 'never'],
+    'vue/attribute-hyphenation': 0,
+    'vue/require-prop-types': 0
   }
 }
